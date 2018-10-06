@@ -27,7 +27,7 @@ class Bot:
                 return create_upgrade_action(UpgradeType.CollectingSpeed)
             elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
                 return create_upgrade_action(UpgradeType.CarryingCapacity)
-
+        #tips
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
         else:
@@ -40,8 +40,7 @@ class Bot:
                     if hyp < 2:
                         attack = player
                         break
-            #ATTTACKK
-
+            
             if attack != False:
                 path = self.astar.find_path(
                     position.x, position.y, attack.Position.x, attack.Position.y)
