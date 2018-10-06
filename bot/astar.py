@@ -107,7 +107,6 @@ class AStar:
                 gtemp = from_node.g + tcost + node.cost
 
                 if (gtemp < node.g):
-                    print('found one')
                     node.set_parent(from_node)
                     node.state = 'open'
                     nodes.append(node)
@@ -174,7 +173,7 @@ class Node:
             TileContent.Empty: 0,
             TileContent.Wall: 5,
             TileContent.House: 0,
-            TileContent.Lava: 5,
+            TileContent.Lava: 999999999,
             TileContent.Resource: 5,
             TileContent.Shop: 5,
             TileContent.Player: 5

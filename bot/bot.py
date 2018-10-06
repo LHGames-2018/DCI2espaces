@@ -75,12 +75,12 @@ class Bot:
         elif len(path) == 1 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             print('collect!')
             return create_collect_action(target)
-        elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
-            if path[-1].tile.TileContent == TileContent.Wall:
-                print('chop chop!')
-                return create_attack_action(target)
-            print('move!')
-            return create_move_action(target)
+        # elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
+        #    if path[-1].tile.TileContent == TileContent.Wall:
+        #        print('chop chop!')
+        #        return create_attack_action(target)
+        #    print('move!')
+        #    return create_move_action(target)
         else:
             print('uh oh')
 
