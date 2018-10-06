@@ -12,6 +12,7 @@ class Bot:
         Gets called before ExecuteTurn. This is where you get your bot's state.
             :param playerInfo: Your bot's current state.
         """
+        self.astar.home = playerInfo.HouseLocation
         self.PlayerInfo = playerInfo
 
     def execute_turn(self, gameMap, visiblePlayers):
