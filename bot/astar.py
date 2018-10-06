@@ -134,7 +134,7 @@ class Grid:
         try:
             return self.nodes[(x, y)]
         except:
-            return Node(x, y, Tile(TileContent.Empty, x, y))
+            return None  # Node(x, y, Tile(TileContent.Empty, x, y))
 
     def reset(self):
         for _, v in self.nodes.items():
