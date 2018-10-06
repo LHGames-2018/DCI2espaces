@@ -5,6 +5,7 @@ from .astar import AStar
 class Bot:
     def __init__(self):
         self.astar = AStar()
+        self.updatePrices = [10000, 15000, 25000, 50000, 100000]
         pass
 
     def before_turn(self, playerInfo):
@@ -24,7 +25,14 @@ class Bot:
 
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
-        elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+
+        if self.PlayerInfo.Position == self.PlayerInfo.HouseLocation:
+            if self.PlayerInfo.UpgradeLevels[UpgradeType.CarryingCapacity] > self.PlayerInfo.UpgradeLevels[UpgradeType.CollectingSpeed] and self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.UpgradeLevels[UpgradeType.CollectingSpeed]+1]:
+                return create_upgrade_action(UpgradeType.CollectingSpeed)
+            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.UpgradeLevels[UpgradeType.CarryingCapacity]+1]:
+                return create_upgrade_action(UpgradeType.CarryingCapacity)
+
+        if self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             path = self.astar.find_nearest_resource(position)
         elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
             path = self.astar.find_home(position)
