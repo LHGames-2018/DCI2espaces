@@ -49,7 +49,12 @@ class Bot:
             elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
                 path = self.astar.find_home(position)
 
-        target = self.astar.get_move(position, path.pop())
+        if len(path) == 0:
+            self.astar.gotHome = False
+            target = self.astar.get_move(
+                position, self.astar.find_home(position).pop())
+        else:
+            target = self.astar.get_move(position, path.pop())
 
         print(len(path), target, self.PlayerInfo.CarriedResources,
               self.PlayerInfo.CarryingCapacity, self.PlayerInfo.UpgradeLevels)
