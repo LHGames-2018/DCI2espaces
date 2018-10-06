@@ -4,8 +4,10 @@ from helper import *
 
 
 class AStar:
-    def __init__(self):
-        self.grid = Grid()
+    def __init__(self, nodes):
+        self.grid = Grid(nodes)
+        self.home = None
+        self.gotHome = False
 
     def update(self, gamemap):
         self.grid.update(gamemap.tiles)
@@ -31,13 +33,26 @@ class AStar:
             return None
         return path[0]
 
-    def find_home(self, player):
-        home = None
+    def find_nearest_player(self, player):
+        players = []
+        path = []
         for _, v in self.grid.nodes.items():
-            if (v.tile.TileContent == TileContent.House):
-                home = v
-                break
-        path = self.find_path(player.x, player.y, home.x, home.y)
+            if (v.tile.TileContent == TileContent.Player):
+                players.append(v)
+
+        for p in players:
+            path.append(self.find_path(player.x, player.y, p.x, p.y))
+
+        def shortest_path(path):
+            return len(path)
+        path.sort(key=shortest_path)
+
+        if len(path) == 0:
+            return None
+        return path[0]
+
+    def find_home(self, player):
+        path = self.find_path(player.x, player.y, self.home.x, self.home.y)
 
         if len(path) == 0:
             return None
@@ -117,8 +132,11 @@ class AStar:
 
 
 class Grid:
-    def __init__(self):
-        self.nodes = {}
+    def __init__(self, nodes):
+        if nodes != None:
+            self.nodes = nodes
+        else:
+            self.nodes = {}
 
     def update(self, tiles):
         for l in tiles:
@@ -134,7 +152,7 @@ class Grid:
         try:
             return self.nodes[(x, y)]
         except:
-            return None
+            return None  # Node(x, y, Tile(TileContent.Empty, x, y))
 
     def reset(self):
         for _, v in self.nodes.items():

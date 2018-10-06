@@ -46,17 +46,6 @@ def create_heal_action():
     return _create_action("HealAction", "")
 
 
-def create_purchase_action(item):
-    """
-    Creates a purchase action for the specified item. You need to be ON
-    a shop tile for this action to succeed. If you are on any other
-    type of tile, the action will fail. You can only carry 1 of each
-    item, except for health potions.
-        :param item: The type of item to purchase.
-    """
-    return _create_action("PurchaseAction", item)
-
-
 def create_empty_action():
     """
     Creates an action that does nothing.
@@ -70,4 +59,27 @@ def _create_action(action_type, target):
     You shouldn't call this.
     """
     actionContent = ActionContent(action_type, json.dumps(target.__dict__))
+    return json.dumps(actionContent.__dict__)
+
+
+def create_purchase_action(item):
+    """
+    Creates a purchase action for the specified item. You need to be ON
+    a shop tile for this action to succeed. If you are on any other
+    type of tile, the action will fail. You can only carry 1 of each
+    item, except for health potions.
+        :param item: The type of item to purchase.
+    """
+    actionContent = ActionContent("PurchaseAction", item)
+    return json.dumps(actionContent.__dict__)
+
+
+def create_upgrade_action(upgrade):
+    """
+    Creates an upgrade action the given upgradeType. You need to be ON
+    your house tile for this action to succeed. If you are on any other
+    type of tile, the action will fail.
+        :param item: The type of upgrade.
+    """
+    actionContent = ActionContent("UpgradeAction", upgrade)
     return json.dumps(actionContent.__dict__)

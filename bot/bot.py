@@ -1,12 +1,17 @@
+import math
 from helper import *
 from .astar import AStar
 
 
 class Bot:
     def __init__(self):
-        self.astar = AStar()
+        # try:
+        #    with open('/data/pickle.bin', 'rb') as file:
+        #        nodes = pickle.load(file)
+        # except:
+        #    nodes = None
+        self.astar = AStar(None)
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
-        pass
 
     def before_turn(self, playerInfo):
         """
@@ -22,30 +27,51 @@ class Bot:
 
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
             self.astar.gotHome = True
-            if self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity) > self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed) and self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)+1]:
-                print('getting sumething')
-                return create_upgrade_action(UpgradeType.CollectingSpeed)
-            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)+1]:
-                print('getting sumething')
-                return create_upgrade_action(UpgradeType.CarryingCapacity)
-
+            # if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
+            #    return create_upgrade_action(UpgradeType.CollectingSpeed)
+            # elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
+            #    return create_upgrade_action(UpgradeType.CarryingCapacity)
+        # return create_move_action(Point(0, -1))
+        state = None
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
+            state = "goingHome"
+        else:
+            attack = False
+            if len(visiblePlayers) != 0:
+                for player in visiblePlayers:
+                    hyp = math.hypot(player.Position.x - position.x,
+                                     player.Position.y - position.y)
+                    print(player, hyp)
+                    if hyp < 2:
+                        attack = player
+                        break
 
-        elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
-            path = self.astar.find_nearest_resource(position)
-        elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
-            path = self.astar.find_home(position)
+            if attack != False:
+                path = self.astar.find_path(
+                    position.x, position.y, attack.Position.x, attack.Position.y)
+            elif self.PlayerInfo.CarriedResources != 0 and len(self.astar.find_home(position)) <= 3 and len(self.astar.find_nearest_resource(position)) >= 3:
+                path = self.astar.find_home(position)
+                state = "goingHome"
+            elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+                path = self.astar.find_nearest_resource(position)
+            elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
+                path = self.astar.find_home(position)
+                state = "goingHome"
 
         target = self.astar.get_move(position, path[-1])
 
         print(len(path), target, self.PlayerInfo.CarriedResources,
-              self.PlayerInfo.CarryingCapacity)
+              self.PlayerInfo.CarryingCapacity, self.PlayerInfo.UpgradeLevels)
 
         if self.astar.gotHome == False:
             print('go home!')
             return create_move_action(target)
-        if len(path) == 1 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+
+        if len(path) == 1 and attack != False:
+            print('attack')
+            return create_attack_action(target)
+        elif len(path) == 1 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity and state != "goingHome":
             print('collect!')
             return create_collect_action(target)
         elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
@@ -58,7 +84,6 @@ class Bot:
             print('uh oh')
 
     def after_turn(self):
-        """
-        Gets called after executeTurn
-        """
         pass
+        # with open('/data/pickle.bin', mode='wb') as file:
+        #    pickle.dump(self.astar.grid.nodes, file)
