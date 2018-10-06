@@ -41,13 +41,13 @@ class Bot:
                     hyp = math.hypot(player.Position.x - position.x,
                                      player.Position.y - position.y)
                     print(player, hyp)
-                    if hyp < 10:
+                    if hyp < 5:
                         attack = player
                         break
 
             if attack != False:
                 path = self.astar.find_path(
-                    position.x, position.y, attack.x, attack.y)
+                    position.x, position.y, attack.Position.x, attack.Position.y)
             elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
                 path = self.astar.find_nearest_resource(position)
             elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
