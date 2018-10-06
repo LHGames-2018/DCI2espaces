@@ -41,7 +41,7 @@ class Bot:
                     hyp = math.hypot(player.Position.x - position.x,
                                      player.Position.y - position.y)
                     print(player, hyp)
-                    if hyp < 5:
+                    if hyp < 2:
                         attack = player
                         break
 
