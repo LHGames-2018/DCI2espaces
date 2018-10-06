@@ -1,5 +1,6 @@
 import math
 from helper.tile import TileContent
+from helper import *
 
 
 class AStar:
@@ -8,6 +9,9 @@ class AStar:
 
     def update(self, gamemap):
         self.grid.update(gamemap.tiles)
+
+    def get_move(self, player, node):
+        return Point(node.x - player.x, node.y - player.y)
 
     def find_nearest_resource(self, player):
         resources = []
@@ -26,6 +30,18 @@ class AStar:
         if len(path) == 0:
             return None
         return path[0]
+
+    def find_home(self, player):
+        home = None
+        for _, v in self.grid.nodes.items():
+            if (v.tile.TileContent == TileContent.House):
+                home = v
+                break
+        path = self.find_path(player.x, player.y, home.x, home.y)
+
+        if len(path) == 0:
+            return None
+        return path
 
     def find_path(self, from_x, from_y, to_x, to_y):
         node_from = self.grid.get_node(from_x, from_y)
@@ -65,7 +81,7 @@ class AStar:
     def get_adj_walk_nodes(self, from_node):
         nodes = []
         for node in self.get_adj_nodes(from_node):
-            if node.walkable == False or node.state == 'closed':
+            if node.state == 'closed':
                 continue
 
             if node.state == 'open':
@@ -157,7 +173,7 @@ class Node:
         }[tile.TileContent]
 
     def calc_traversal(self, node):
-        return math.sqrt(((node.x - self.x) ** 2 + (node.y - self.y) ** 2) + self.cost)
+        return math.sqrt((math.pow(node.x - self.x, 2) + math.pow(node.y - self.y, 2)) + self.cost)
 
     def updateH(self, node_to):
         self.h = self.calc_traversal(node_to)

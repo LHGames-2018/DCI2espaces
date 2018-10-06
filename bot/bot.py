@@ -17,17 +17,24 @@ class Bot:
     def execute_turn(self, gameMap, visiblePlayers):
         position = self.PlayerInfo.Position
         self.astar.update(gameMap)
-        path = self.astar.find_nearest_resource(position)
-        print(path)
 
-        """
-        This is where you decide what action to take.
-            :param gameMap: The gamemap.
-            :param visiblePlayers:  The list of visible players.
-        """
+        if self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+            path = self.astar.find_nearest_resource(position)
+        elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
+            path = self.astar.find_home(position)
 
-        # Write your bot here. Use functions from aiHelper to instantiate your actions.
-        return create_move_action(Point(1, 0))
+        target = self.astar.get_move(position, path.pop())
+
+        print(len(path), self.PlayerInfo.CarriedResources,
+              self.PlayerInfo.CarryingCapacity)
+        if len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+            print('collect!')
+            return create_collect_action(target)
+        elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
+            print('move!')
+            return create_move_action(target)
+        else:
+            print('uh oh')
 
     def after_turn(self):
         """
