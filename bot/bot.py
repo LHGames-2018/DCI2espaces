@@ -34,24 +34,24 @@ class Bot:
 
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
+        else:
+            attack = False
+            if len(visiblePlayers) != 0:
+                for player in visiblePlayers:
+                    hyp = math.hypot(player.Position.x - position.x,
+                                     player.Position.y - position.y)
+                    print(player, hyp)
+                    if hyp < 10:
+                        attack = player
+                        break
 
-        attack = False
-        if len(visiblePlayers) != 0:
-            for player in visiblePlayers:
-                hyp = math.hypot(player.Position.x - position.x,
-                                 player.Position.y - position.y)
-                print(player, hyp)
-                if hyp < 10:
-                    attack = player
-                    break
-
-        if attack != False:
-            path = self.astar.find_path(
-                position.x, position.y, attack.x, attack.y)
-        elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
-            path = self.astar.find_nearest_resource(position)
-        elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
-            path = self.astar.find_home(position)
+            if attack != False:
+                path = self.astar.find_path(
+                    position.x, position.y, attack.x, attack.y)
+            elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+                path = self.astar.find_nearest_resource(position)
+            elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
+                path = self.astar.find_home(position)
 
         target = self.astar.get_move(position, path.pop())
 
