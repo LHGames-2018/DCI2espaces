@@ -11,7 +11,7 @@ class Bot:
         #        nodes = pickle.load(file)
         # except:
         #    nodes = None
-        self.astar = AStar(nodes)
+        self.astar = AStar(None)
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
 
     def before_turn(self, playerInfo):
