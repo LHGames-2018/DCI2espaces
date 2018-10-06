@@ -1,8 +1,10 @@
 from helper import *
+from .astar import AStar
 
 
 class Bot:
     def __init__(self):
+        self.astar = AStar()
         pass
 
     def before_turn(self, playerInfo):
@@ -13,6 +15,11 @@ class Bot:
         self.PlayerInfo = playerInfo
 
     def execute_turn(self, gameMap, visiblePlayers):
+        position = self.PlayerInfo.Position
+        self.astar.update(gameMap)
+        path = self.astar.find_nearest_resource(position)
+        print(path)
+
         """
         This is where you decide what action to take.
             :param gameMap: The gamemap.
