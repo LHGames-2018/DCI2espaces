@@ -27,11 +27,10 @@ class Bot:
 
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
             self.astar.gotHome = True
-            # if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
-            #    return create_upgrade_action(UpgradeType.CollectingSpeed)
-            # elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
-            #    return create_upgrade_action(UpgradeType.CarryingCapacity)
-        # return create_move_action(Point(0, -1))
+            if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
+                return create_upgrade_action(UpgradeType.CollectingSpeed)
+            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
+                return create_upgrade_action(UpgradeType.CarryingCapacity)
 
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
