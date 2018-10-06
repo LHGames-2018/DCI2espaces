@@ -41,7 +41,7 @@ class Bot:
                         attack = player
                         break
             #ATTTACKK
-            
+
             if attack != False:
                 path = self.astar.find_path(
                     position.x, position.y, attack.Position.x, attack.Position.y)
@@ -59,7 +59,7 @@ class Bot:
 
         print(len(path), target, self.PlayerInfo.CarriedResources,
               self.PlayerInfo.CarryingCapacity, self.PlayerInfo.UpgradeLevels)
-
+        #HOMESWEETHOME
         if (not (position.x == self.astar.home.x and position.y == self.astar.home.y)) and math.hypot(position.x - self.astar.home.x, position.y - self.astar.home.y) > 8:
             print('going home because too far')
             self.astar.gotHome = False
