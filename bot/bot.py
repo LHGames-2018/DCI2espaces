@@ -8,6 +8,7 @@ class Bot:
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
         pass
 
+
     def before_turn(self, playerInfo):
         """
         Gets called before ExecuteTurn. This is where you get your bot's state.
