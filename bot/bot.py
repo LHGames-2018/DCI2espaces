@@ -14,6 +14,7 @@ class Bot:
         self.astar = AStar(nodes)
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
 
+
     def before_turn(self, playerInfo):
         """
         Gets called before ExecuteTurn. This is where you get your bot's state.
