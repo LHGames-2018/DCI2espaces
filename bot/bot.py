@@ -8,6 +8,8 @@ class Bot:
     def __init__(self):
         self.astar = AStar(None)
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
+        self.pos_history = []
+        self.stuck_count = 0
 
     def before_turn(self, playerInfo):
         self.astar.home = playerInfo.HouseLocation
@@ -15,6 +17,17 @@ class Bot:
 
     def execute_turn(self, gameMap, visiblePlayers):
         position = self.PlayerInfo.Position
+
+        self.pos_history.append(position)
+        if len(self.pos_history) > 2:
+            if position.x == self.pos_history[0].x and position.y == self.pos_history[0].y:
+                self.stuck_count = self.stuck_count + 1
+            self.pos_history.pop(0)
+        if self.stuck_count > 2:
+            self.astar.gotHome = False
+            self.stuck_count = 0
+            self.pos_history.clear()
+
         self.astar.update(gameMap)
         # comments are nice
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
@@ -42,6 +55,7 @@ class Bot:
                     if hyp < 2:
                         attack = player
                         break
+            #ATTTACKK
 
             if attack != False:
                 path = self.astar.find_path(
