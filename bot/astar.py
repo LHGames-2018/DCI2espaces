@@ -24,7 +24,7 @@ class AStar:
             path.append(self.find_path(player.x, player.y, res.x, res.y))
 
         def shortest_path(path):
-            return len(path)
+            return sum(x.cost for x in path)
         path.sort(key=shortest_path)
 
         if len(path) == 0:
@@ -153,10 +153,10 @@ class Node:
 
         self.tile = tile
         self.cost = {
-            TileContent.Empty: 0,
-            TileContent.Wall: 5,
+            TileContent.Empty: 1,
+            TileContent.Wall: 6,
             TileContent.House: 0,
-            TileContent.Lava: 5,
+            TileContent.Lava: 9000,
             TileContent.Resource: 5,
             TileContent.Shop: 5,
             TileContent.Player: 5
