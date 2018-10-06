@@ -55,7 +55,7 @@ class Bot:
             elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
                 path = self.astar.find_home(position)
 
-        target = self.astar.get_move(position, path.pop())
+        target = self.astar.get_move(position, path[-1])
 
         print(len(path), target, self.PlayerInfo.CarriedResources,
               self.PlayerInfo.CarryingCapacity, self.PlayerInfo.UpgradeLevels)
@@ -64,13 +64,16 @@ class Bot:
             print('go home!')
             return create_move_action(target)
 
-        if len(path) == 0 and attack != False:
+        if len(path) == 1 and attack != False:
             print('attack')
             return create_attack_action(target)
-        elif len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+        elif len(path) == 1 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             print('collect!')
             return create_collect_action(target)
         elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
+            if path[-1].tile.TileContent == TileContent.Wall:
+                print('chop chop!')
+                return create_attack_action(target)
             print('move!')
             return create_move_action(target)
         else:
