@@ -23,7 +23,11 @@ class Bot:
 
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
             self.astar.gotHome = True
-            if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
+            if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.AttackPower)]:
+                return create_upgrade_action(UpgradeType.AttackPower)
+            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.Defence)]:
+                return create_upgrade_action(UpgradeType.Defence)
+            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
                 return create_upgrade_action(UpgradeType.CollectingSpeed)
             elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
                 return create_upgrade_action(UpgradeType.CarryingCapacity)
