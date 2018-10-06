@@ -43,8 +43,6 @@ class AStar:
             while (node.parent != None):
                 path.append(node)
                 node = node.parent
-        else:
-            print('fuk')
 
         self.grid.reset()
         return path
@@ -76,7 +74,9 @@ class AStar:
                     node.y - node.parent.y
                 )
                 gtemp = from_node.g + tcost + node.cost
+
                 if (gtemp < node.g):
+                    print('found one')
                     node.set_parent(from_node)
                     node.state = 'open'
                     nodes.append(node)
@@ -91,11 +91,11 @@ class AStar:
         nodes = []
         if self.grid.get_node(node.x, node.y - 1) != None:
             nodes.append(self.grid.get_node(node.x, node.y - 1))
-        if self.grid.get_node(node.y - 1, node.y) != None:
+        if self.grid.get_node(node.x - 1, node.y) != None:
             nodes.append(self.grid.get_node(node.x - 1, node.y))
         if self.grid.get_node(node.x, node.y + 1) != None:
             nodes.append(self.grid.get_node(node.x, node.y + 1))
-        if self.grid.get_node(node.y + 1, node.y) != None:
+        if self.grid.get_node(node.x + 1, node.y) != None:
             nodes.append(self.grid.get_node(node.x + 1, node.y))
         return nodes
 
