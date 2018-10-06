@@ -56,13 +56,14 @@ def create_purchase_action(item):
     """
     return _create_action("PurchaseAction", item)
 
-
 def create_upgrade_action(item):
     """
-    Creates an action that does nothing.
+    Creates a upgrade action for the specified type. You need to be ON
+    your house for this action to succeed. If you are on any other
+    type of tile, the action will fail. You can only upgrade 5 times for one type
+        :param item: The type of upgrade.
     """
     return _create_action("UpgradeAction", item)
-
 
 def create_empty_action():
     """
