@@ -6,6 +6,7 @@ from helper import *
 class AStar:
     def __init__(self):
         self.grid = Grid()
+        self.home = None
         self.gotHome = False
 
     def update(self, gamemap):

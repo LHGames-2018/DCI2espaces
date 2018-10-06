@@ -21,6 +21,7 @@ class Bot:
 
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
             self.astar.gotHome = True
+
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
         elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
