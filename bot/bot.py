@@ -6,15 +6,6 @@ from .astar import AStar
 
 class Bot:
     def __init__(self):
-        # try:
-        #    if 'LOCAL_STORAGE' in os.environ:
-        #        with open(os.environ['LOCAL_STORAGE'] + '/document.json', 'rb') as file:
-        #            nodes = pickle.load(file)
-        #    else:
-        #        with open('/data/document.json', 'rb') as file:
-        #            nodes = pickle.load(file)
-        # except:
-        #    nodes = None
         self.astar = AStar(None)
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
 
@@ -80,9 +71,3 @@ class Bot:
 
     def after_turn(self):
         pass
-        # if 'LOCAL_STORAGE' in os.environ:
-        #    with open(os.environ['LOCAL_STORAGE'] + '/document.json', mode='wb') as file:
-        #        pickle.dump(self.astar.grid.nodes, file)
-        # else:
-        #    with open('/data/document.json', mode='wb') as file:
-        #        pickle.dump(self.astar.grid.nodes, file)
