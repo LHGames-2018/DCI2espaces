@@ -4,8 +4,8 @@ from helper import *
 
 
 class AStar:
-    def __init__(self):
-        self.grid = Grid()
+    def __init__(self, nodes):
+        self.grid = Grid(nodes)
         self.home = None
         self.gotHome = False
 
@@ -114,8 +114,11 @@ class AStar:
 
 
 class Grid:
-    def __init__(self):
-        self.nodes = {}
+    def __init__(self, nodes):
+        if nodes != None:
+            self.nodes = nodes
+        else:
+            self.nodes = {}
 
     def update(self, tiles):
         for l in tiles:

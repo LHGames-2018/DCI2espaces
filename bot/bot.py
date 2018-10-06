@@ -1,12 +1,18 @@
+import pickle
+import base64
 from helper import *
 from .astar import AStar
 
 
 class Bot:
     def __init__(self):
-        self.astar = AStar()
+        try:
+            with open('/data/pickle.bin', 'rb') as file:
+                nodes = pickle.load(file)
+        except:
+            nodes = None
+        self.astar = AStar(nodes)
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
-        pass
 
     def before_turn(self, playerInfo):
         """
@@ -22,11 +28,9 @@ class Bot:
 
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
             self.astar.gotHome = True
-            if self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity) > self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed) and self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)+1]:
-                print('getting sumething')
+            if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
                 return create_upgrade_action(UpgradeType.CollectingSpeed)
-            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)+1]:
-                print('getting sumething')
+            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
                 return create_upgrade_action(UpgradeType.CarryingCapacity)
 
         if self.astar.gotHome == False:
@@ -40,7 +44,7 @@ class Bot:
         target = self.astar.get_move(position, path.pop())
 
         print(len(path), target, self.PlayerInfo.CarriedResources,
-              self.PlayerInfo.CarryingCapacity)
+              self.PlayerInfo.CarryingCapacity, self.PlayerInfo.UpgradeLevels)
 
         if self.astar.gotHome == False:
             print('go home!')
@@ -55,7 +59,5 @@ class Bot:
             print('uh oh')
 
     def after_turn(self):
-        """
-        Gets called after executeTurn
-        """
-        pass
+        with open('/data/pickle.bin', mode='wb') as file:
+            pickle.dump(self.astar.grid.nodes, file)
