@@ -19,7 +19,11 @@ class Bot:
         position = self.PlayerInfo.Position
         self.astar.update(gameMap)
 
-        if self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+        if (position.x == self.astar.home.x and position.y == self.astar.home.y):
+            self.astar.gotHome = True
+        if self.astar.gotHome == False:
+            path = self.astar.find_home(position)
+        elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             path = self.astar.find_nearest_resource(position)
         elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
             path = self.astar.find_home(position)
@@ -28,6 +32,10 @@ class Bot:
 
         print(len(path), self.PlayerInfo.CarriedResources,
               self.PlayerInfo.CarryingCapacity)
+
+        if self.astar.gotHome == False:
+            print('go home!')
+            return create_move_action(target)
         if len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             print('collect!')
             return create_collect_action(target)

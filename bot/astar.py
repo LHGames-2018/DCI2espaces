@@ -6,6 +6,7 @@ from helper import *
 class AStar:
     def __init__(self):
         self.grid = Grid()
+        self.gotHome = False
 
     def update(self, gamemap):
         self.grid.update(gamemap.tiles)
@@ -32,12 +33,7 @@ class AStar:
         return path[0]
 
     def find_home(self, player):
-        home = None
-        for _, v in self.grid.nodes.items():
-            if (v.tile.TileContent == TileContent.House):
-                home = v
-                break
-        path = self.find_path(player.x, player.y, home.x, home.y)
+        path = self.find_path(player.x, player.y, self.home.x, self.home.y)
 
         if len(path) == 0:
             return None
