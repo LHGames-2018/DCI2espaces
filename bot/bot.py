@@ -40,7 +40,8 @@ class Bot:
                     if hyp < 2:
                         attack = player
                         break
-
+            #ATTTACKK
+            
             if attack != False:
                 path = self.astar.find_path(
                     position.x, position.y, attack.Position.x, attack.Position.y)
