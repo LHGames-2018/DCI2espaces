@@ -20,14 +20,19 @@ class Bot:
         position = self.PlayerInfo.Position
         self.astar.update(gameMap)
 
-        if self.PlayerInfo.Position == self.PlayerInfo.HouseLocation:
-            print('we home')
-        #    if self.PlayerInfo.UpgradeLevels[UpgradeType.CarryingCapacity] > self.PlayerInfo.UpgradeLevels[UpgradeType.CollectingSpeed] and self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.UpgradeLevels[UpgradeType.CollectingSpeed]+1]:
-        #        return create_upgrade_action(UpgradeType.CollectingSpeed)
-        #    elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.UpgradeLevels[UpgradeType.CarryingCapacity]+1]:
-        #        return create_upgrade_action(UpgradeType.CarryingCapacity)
+        if (position.x == self.astar.home.x and position.y == self.astar.home.y):
+            self.astar.gotHome = True
+            # if self.PlayerInfo.UpgradeLevels[UpgradeType.CarryingCapacity] > self.PlayerInfo.UpgradeLevels[UpgradeType.CollectingSpeed] and self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.UpgradeLevels[UpgradeType.CollectingSpeed]+1]:
+            #    print('getting sumething')
+            #    return create_upgrade_action(UpgradeType.CollectingSpeed)
+            # elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.UpgradeLevels[UpgradeType.CarryingCapacity]+1]:
+            #    print('getting sumething')
+            #    return create_upgrade_action(UpgradeType.CarryingCapacity)
 
-        if self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+        if self.astar.gotHome == False:
+            path = self.astar.find_home(position)
+
+        elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             path = self.astar.find_nearest_resource(position)
         elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
             path = self.astar.find_home(position)
@@ -37,6 +42,9 @@ class Bot:
         print(len(path), target, self.PlayerInfo.CarriedResources,
               self.PlayerInfo.CarryingCapacity)
 
+        if self.astar.gotHome == False:
+            print('go home!')
+            return create_move_action(target)
         if len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             print('collect!')
             return create_collect_action(target)
