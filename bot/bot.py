@@ -10,10 +10,6 @@ class Bot:
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
 
     def before_turn(self, playerInfo):
-        """
-        Gets called before ExecuteTurn. This is where you get your bot's state.
-            :param playerInfo: Your bot's current state.
-        """
         self.astar.home = playerInfo.HouseLocation
         self.PlayerInfo = playerInfo
 
@@ -63,8 +59,6 @@ class Bot:
         print(len(path), target, self.PlayerInfo.CarriedResources,
               self.PlayerInfo.CarryingCapacity, self.PlayerInfo.UpgradeLevels)
 
-        print(math.hypot(position.x - self.astar.home.x,
-                         position.y - self.astar.home.y))
         if (not (position.x == self.astar.home.x and position.y == self.astar.home.y)) and math.hypot(position.x - self.astar.home.x, position.y - self.astar.home.y) > 8:
             print('going home because too far')
             self.astar.gotHome = False
