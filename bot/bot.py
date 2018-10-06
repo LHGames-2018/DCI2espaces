@@ -6,16 +6,16 @@ from .astar import AStar
 
 class Bot:
     def __init__(self):
-        try:
-            if 'LOCAL_STORAGE' in os.environ:
-                with open(os.environ['LOCAL_STORAGE'] + '/document.json', 'rb') as file:
-                    nodes = pickle.load(file)
-            else:
-                with open('/data/document.json', 'rb') as file:
-                    nodes = pickle.load(file)
-        except:
-            nodes = None
-        self.astar = AStar(nodes)
+        # try:
+        #    if 'LOCAL_STORAGE' in os.environ:
+        #        with open(os.environ['LOCAL_STORAGE'] + '/document.json', 'rb') as file:
+        #            nodes = pickle.load(file)
+        #    else:
+        #        with open('/data/document.json', 'rb') as file:
+        #            nodes = pickle.load(file)
+        # except:
+        #    nodes = None
+        self.astar = AStar(None)
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
 
     def before_turn(self, playerInfo):
@@ -60,7 +60,7 @@ class Bot:
             elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
                 path = self.astar.find_home(position)
 
-        target = self.astar.get_move(position, path[-1])
+        target = self.astar.get_move(position, path.pop())
 
         print(len(path), target, self.PlayerInfo.CarriedResources,
               self.PlayerInfo.CarryingCapacity, self.PlayerInfo.UpgradeLevels)
@@ -69,25 +69,22 @@ class Bot:
             print('go home!')
             return create_move_action(target)
 
-        if len(path) == 1 and attack != False:
+        if len(path) == 0 and attack != False:
             print('attack')
             return create_attack_action(target)
-        elif len(path) == 1 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+        elif len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             print('collect!')
             return create_collect_action(target)
-        # elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
-        #    if path[-1].tile.TileContent == TileContent.Wall:
-        #        print('chop chop!')
-        #        return create_attack_action(target)
-        #    print('move!')
-        #    return create_move_action(target)
+        elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
+            return create_move_action(target)
         else:
             print('uh oh')
 
     def after_turn(self):
-        if 'LOCAL_STORAGE' in os.environ:
-            with open(os.environ['LOCAL_STORAGE'] + '/document.json', mode='wb') as file:
-                pickle.dump(self.astar.grid.nodes, file)
-        else:
-            with open('/data/document.json', mode='wb') as file:
-                pickle.dump(self.astar.grid.nodes, file)
+        pass
+        # if 'LOCAL_STORAGE' in os.environ:
+        #    with open(os.environ['LOCAL_STORAGE'] + '/document.json', mode='wb') as file:
+        #        pickle.dump(self.astar.grid.nodes, file)
+        # else:
+        #    with open('/data/document.json', mode='wb') as file:
+        #        pickle.dump(self.astar.grid.nodes, file)
