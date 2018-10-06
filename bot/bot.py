@@ -70,9 +70,10 @@ class Bot:
             print('collect!')
             return create_collect_action(target)
         elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
-            return create_move_action(target)
+            return create_move_action(target) 
         else:
             print('uh oh')
 
     def after_turn(self):
         pass
+
