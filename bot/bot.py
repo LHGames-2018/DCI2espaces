@@ -1,5 +1,4 @@
-import pickle
-import base64
+import math
 from helper import *
 from .astar import AStar
 
@@ -36,6 +35,19 @@ class Bot:
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
 
+        attack = False
+        if len(visiblePlayers) != 0:
+            for player in visiblePlayers:
+                hyp = math.hypot(player.Position.x - position.x,
+                                 player.Position.y - position.y)
+                print(player, hyp)
+                if hyp < 10:
+                    attack = player
+                    break
+
+        if attack != False:
+            path = self.astar.find_path(
+                position.x, position.y, attack.x, attack.y)
         elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             path = self.astar.find_nearest_resource(position)
         elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
@@ -49,7 +61,11 @@ class Bot:
         if self.astar.gotHome == False:
             print('go home!')
             return create_move_action(target)
-        if len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
+
+        if len(path) == 0 and len(visiblePlayers) != 0:
+            print('attack')
+            return create_attack_action(target)
+        elif len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
             print('collect!')
             return create_collect_action(target)
         elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity or self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:

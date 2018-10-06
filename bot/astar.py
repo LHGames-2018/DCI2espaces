@@ -33,6 +33,24 @@ class AStar:
             return None
         return path[0]
 
+    def find_nearest_player(self, player):
+        players = []
+        path = []
+        for _, v in self.grid.nodes.items():
+            if (v.tile.TileContent == TileContent.Player):
+                players.append(v)
+
+        for p in players:
+            path.append(self.find_path(player.x, player.y, p.x, p.y))
+
+        def shortest_path(path):
+            return len(path)
+        path.sort(key=shortest_path)
+
+        if len(path) == 0:
+            return None
+        return path[0]
+
     def find_home(self, player):
         path = self.find_path(player.x, player.y, self.home.x, self.home.y)
 
