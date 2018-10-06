@@ -27,10 +27,10 @@ class Bot:
 
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
             self.astar.gotHome = True
-            if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
-                return create_upgrade_action(UpgradeType.CollectingSpeed)
-            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
-                return create_upgrade_action(UpgradeType.CarryingCapacity)
+            # if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
+            #    return create_upgrade_action(UpgradeType.CollectingSpeed)
+            # elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
+            #    return create_upgrade_action(UpgradeType.CarryingCapacity)
 
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
@@ -62,7 +62,7 @@ class Bot:
             print('go home!')
             return create_move_action(target)
 
-        if attack != False:
+        if len(path) == 0 and attack != False:
             print('attack')
             return create_attack_action(target)
         elif len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
