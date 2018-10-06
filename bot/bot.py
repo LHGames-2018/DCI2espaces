@@ -6,14 +6,13 @@ from .astar import AStar
 
 class Bot:
     def __init__(self):
-        try:
-            with open('/data/pickle.bin', 'rb') as file:
-                nodes = pickle.load(file)
-        except:
-            nodes = None
+        # try:
+        #    with open('/data/pickle.bin', 'rb') as file:
+        #        nodes = pickle.load(file)
+        # except:
+        #    nodes = None
         self.astar = AStar(nodes)
         self.updatePrices = [10000, 15000, 25000, 50000, 100000]
-
 
     def before_turn(self, playerInfo):
         """
@@ -60,5 +59,6 @@ class Bot:
             print('uh oh')
 
     def after_turn(self):
-        with open('/data/pickle.bin', mode='wb') as file:
-            pickle.dump(self.astar.grid.nodes, file)
+        pass
+        # with open('/data/pickle.bin', mode='wb') as file:
+        #    pickle.dump(self.astar.grid.nodes, file)
