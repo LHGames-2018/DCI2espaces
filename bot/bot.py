@@ -16,18 +16,20 @@ class Bot:
     def execute_turn(self, gameMap, visiblePlayers):
         position = self.PlayerInfo.Position
         self.astar.update(gameMap)
-        #comments are nice
+        # comments are nice
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
             self.astar.gotHome = True
             if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.AttackPower)]:
                 return create_upgrade_action(UpgradeType.AttackPower)
+            elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.MaximumHealth)]:
+                return create_upgrade_action(UpgradeType.MaximumHealth)
             elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.Defence)]:
                 return create_upgrade_action(UpgradeType.Defence)
             elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
                 return create_upgrade_action(UpgradeType.CollectingSpeed)
             elif self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CarryingCapacity)]:
                 return create_upgrade_action(UpgradeType.CarryingCapacity)
-        #tips
+        # tips
         if self.astar.gotHome == False:
             path = self.astar.find_home(position)
         else:
@@ -40,7 +42,7 @@ class Bot:
                     if hyp < 2:
                         attack = player
                         break
-            
+
             if attack != False:
                 path = self.astar.find_path(
                     position.x, position.y, attack.Position.x, attack.Position.y)
@@ -58,7 +60,7 @@ class Bot:
 
         print(len(path), target, self.PlayerInfo.CarriedResources,
               self.PlayerInfo.CarryingCapacity, self.PlayerInfo.UpgradeLevels)
-        #HOMESWEETHOME
+        # HOMESWEETHOME
         if (not (position.x == self.astar.home.x and position.y == self.astar.home.y)) and math.hypot(position.x - self.astar.home.x, position.y - self.astar.home.y) > 8:
             print('going home because too far')
             self.astar.gotHome = False
