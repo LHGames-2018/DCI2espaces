@@ -26,7 +26,7 @@ class Bot:
         if self.stuck_count > 2:
             self.astar.gotHome = False
             self.stuck_count = 0
-            self.pos_history = []
+            self.pos_history.clear()
 
         self.astar.update(gameMap)
         #comments are nice
