@@ -21,8 +21,6 @@ class Bot:
         position = self.PlayerInfo.Position
         self.astar.update(gameMap)
 
-        return create_move_action(Point(0, -1))
-
         if (position.x == self.astar.home.x and position.y == self.astar.home.y):
             self.astar.gotHome = True
             if self.PlayerInfo.TotalResources >= self.updatePrices[self.PlayerInfo.getUpgradeLevel(UpgradeType.CollectingSpeed)]:
