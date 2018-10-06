@@ -62,7 +62,7 @@ class Bot:
             print('go home!')
             return create_move_action(target)
 
-        if len(path) == 0 and len(visiblePlayers) != 0:
+        if attack != False:
             print('attack')
             return create_attack_action(target)
         elif len(path) == 0 and self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
