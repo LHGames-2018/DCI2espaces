@@ -48,6 +48,8 @@ class Bot:
             if attack != False:
                 path = self.astar.find_path(
                     position.x, position.y, attack.Position.x, attack.Position.y)
+            elif self.PlayerInfo.CarriedResources != 0 and len(self.astar.find_home(position)) <= 3:
+                path = self.astar.find_home(position)
             elif self.PlayerInfo.CarriedResources < self.PlayerInfo.CarryingCapacity:
                 path = self.astar.find_nearest_resource(position)
             elif self.PlayerInfo.CarriedResources >= self.PlayerInfo.CarryingCapacity:
