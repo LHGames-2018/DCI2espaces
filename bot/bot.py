@@ -18,7 +18,10 @@ class Bot:
     def execute_turn(self, gameMap, visiblePlayers):
         position = self.PlayerInfo.Position
 
-        self.pos_history.append(position)
+        if len(self.pos_history) > 0 and (position.x != self.pos_history[0].x or position.y != self.pos_history[0].y):
+            self.pos_history.append(position)
+        else:
+            self.pos_history = [position]
         if len(self.pos_history) > 2:
             if position.x == self.pos_history[0].x and position.y == self.pos_history[0].y:
                 self.stuck_count = self.stuck_count + 1
